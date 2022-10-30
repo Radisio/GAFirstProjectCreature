@@ -7,6 +7,18 @@
     <groupId>org.example</groupId>
     <artifactId>PremierProjetCreature</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>com.googlecode.lanterna</groupId>
+            <artifactId>lanterna</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.11</version>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>13</maven.compiler.source>

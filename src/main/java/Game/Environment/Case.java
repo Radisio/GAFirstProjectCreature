@@ -1,8 +1,10 @@
-package Environment;
+package Game.Environment;
 
-import Const.DesignConst;
+import Game.Const.DesignConst;
 
-public class Case {
+import java.io.Serializable;
+
+public class Case implements Serializable {
     private char occupation;
     private boolean occupied;
     public Case(char occupation) {
@@ -15,14 +17,15 @@ public class Case {
 
     public void setOccupation(char occupation) {
         this.occupation = occupation;
-        if(this.occupation == DesignConst.EMPTY)
+        /*if(this.occupation == DesignConst.EMPTY)
             this.occupied = false;
         else
-            this.occupied = true;
+            this.occupied = true;*/
     }
 
     public boolean isOccupied() {
-        return occupied;
+        //return occupied;
+        return this.occupation==DesignConst.WHITE_SQUARE;
     }
 
     public void setOccupied(boolean occupied) {

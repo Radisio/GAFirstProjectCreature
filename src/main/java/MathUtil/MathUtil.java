@@ -1,5 +1,7 @@
 package MathUtil;
 import java.lang.Math;
+import java.util.ArrayList;
+
 public class MathUtil {
 
     public static double sumPowVector(int[] vec)
@@ -36,5 +38,20 @@ public class MathUtil {
         double theta = Math.acos(scalarProduct/(nu*nv));
         double thetaDegree = Math.toDegrees(theta);
         return thetaDegree;
+    }
+
+    public static ArrayList<Integer> range(int min, int max, int step)
+    {
+        ArrayList<Integer> returnedArray = new ArrayList<Integer>();
+        for(int i =min; i<max; i+=step)
+        {
+            returnedArray.add(i);
+        }
+        return returnedArray;
+    }
+
+    public static double euclidianDistance(Position2D pos1, Position2D pos2)
+    {
+        return Math.sqrt(Math.pow(pos1.x-pos2.x,2)+Math.pow(pos1.y-pos2.y,2));
     }
 }
