@@ -3,21 +3,59 @@ package GeneticAlgorithm.MonoThread;
 import Game.Creature.Creature;
 import Game.Environment.Environment;
 import Game.Game;
+import GeneticAlgorithm.Configuration.GAConfig;
+import GeneticAlgorithm.Selection.Selection;
 import GeneticAlgorithm.Utility.CrossOverUtil;
 import GeneticAlgorithm.Utility.MutationUtil;
 import GeneticAlgorithm.Utility.SelectionUtil;
 
 public class GeneticAlgorithmMonoThread {
 
-    private double uniformRate = 0.5;
-    private double allOrNoneRate = 0.25;
-    private double mutationFlipRate = 0.025;
-    private double mutationAddRate = 0.025;
-    private double mutationSubRate = 0.025;
+    private double uniformRate;
+    private double mutationFlipRate;
+    private double mutationAddRate;
+    private double mutationSubRate;
     private double percentageParentsToKeep;
+    private double solution;
     private Environment environment;
+    private Selection parentSelection;
+    private Selection crossOverSelection;
+    private int nbCreature;
+    public GeneticAlgorithmMonoThread(){
+        uniformRate = 0.5;
+        mutationFlipRate = 0.025;
+        mutationAddRate = 0.025;
+        mutationSubRate = 0.025;
+        this.solution = 0;
+        this.environment=null;
+        this.percentageParentsToKeep=0.0;
+    }
 
-    public Game runAlgorithm(Environment environment, int nbCreature,double solution, int maxIter, double percentageParentsToKeep) throws InterruptedException, CloneNotSupportedException {
+    public GeneticAlgorithmMonoThread(double uniformRate, double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Environment environment) {
+        this.uniformRate = uniformRate;
+        this.mutationFlipRate = mutationFlipRate;
+        this.mutationAddRate = mutationAddRate;
+        this.mutationSubRate = mutationSubRate;
+        this.percentageParentsToKeep = percentageParentsToKeep;
+        this.solution = solution;
+        this.environment = environment;
+    }
+
+    public GeneticAlgorithmMonoThread(int nbCreature, double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep,
+                                      double solution,Selection parentSelection, Selection crossOverSelection) {
+        this.nbCreature=nbCreature;
+        this.mutationFlipRate = mutationFlipRate;
+        this.mutationAddRate = mutationAddRate;
+        this.mutationSubRate = mutationSubRate;
+        this.percentageParentsToKeep = percentageParentsToKeep;
+        this.solution = solution;
+        this.parentSelection = parentSelection;
+        this.crossOverSelection = crossOverSelection;
+    }
+
+
+
+    public Game runAlgorithm(Environment environment, int maxIter) throws InterruptedException, CloneNotSupportedException {
         this.environment = environment;
         this.percentageParentsToKeep = percentageParentsToKeep;
         Population myPop = new Population(nbCreature,environment, true);

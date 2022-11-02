@@ -1,0 +1,17 @@
+percentageParentsToKeep: 20.0
+nbCreature: 500
+solution: 0
+nbThread: 1
+parentSelection:
+  method: "tournament"
+  mp:
+    tournamentSize: "10"
+  rate: 0.25
+evolveSelection:
+  method: "tournament"
+  mp:
+    tournamentSize: "10"
+  rate: 0.25
+mutationFlipRate: 0.025
+mutationAddRate: 0.025
+mutationSubRate: 0.025
