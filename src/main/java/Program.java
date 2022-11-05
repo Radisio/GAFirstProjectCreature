@@ -1,14 +1,23 @@
-import Game.Environment.Environment;
 import Game.Environment.EnvironmentBuilder;
 import Game.Game;
-import GeneticAlgorithm.Configuration.GAConfig;
 import GeneticAlgorithm.Configuration.GAYamlMapper;
-import GeneticAlgorithm.MonoThread.GeneticAlgorithmMonoThread;
+import GeneticAlgorithm.GeneticAlgorithm;
 import jdk.jshell.spi.ExecutionControl;
+import org.fusesource.jansi.*;
 
 import java.io.*;
 
 public class Program {
+    static String ESC = "\u001b";
+    static String CSI = ESC + '[';
+    private static String csinf(int n)
+    {
+        return CSI + n + "F";
+    }
+    private static String text(String str, int n)
+    {
+        return csinf(n) + str;
+    }
     public static void main(String[] args) throws IOException, InterruptedException, CloneNotSupportedException, ExecutionControl.NotImplementedException {
         /*
         Game.Environment b = null;
@@ -53,8 +62,11 @@ public class Program {
         //System.out.println("TEST");
         //System.out.println(GAYamlMapper.getGAConfigFromYAML(Program.class.getClassLoader().getResource("GAConfigs/1.yaml").getPath()));
         //System.out.println(GAYamlMapper.getGAConfigFromYAML("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\GAConfigs\\1.yaml"));
-        GeneticAlgorithmMonoThread ga = GAYamlMapper.getGeneticAlgorithmFromPath("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\GAConfigs\\1.yaml");
-        Game bestG = ga.runAlgorithm(new EnvironmentBuilder().build(), 1000);
+        System.out.println(Runtime.getRuntime().availableProcessors());
+
+        GeneticAlgorithm ga = GAYamlMapper.getGeneticAlgorithmFromPath("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\GAConfigs\\1.yaml");
+        ga.setEnvironment(new EnvironmentBuilder().build());
+        Game bestG = ga.runAlgorithm(1000);
         bestG.start();
     }
 }

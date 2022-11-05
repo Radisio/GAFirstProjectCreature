@@ -1,7 +1,7 @@
 package GeneticAlgorithm.Utility;
 
 import Game.Game;
-import GeneticAlgorithm.MonoThread.Population;
+import GeneticAlgorithm.Population;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package GeneticAlgorithm.MonoThread;
+package GeneticAlgorithm;
 
 import Game.Creature.Creature;
 import Game.Environment.Environment;
@@ -26,9 +26,20 @@ public class Population {
         return games.get(index);
     }
 
-    public void startGame() throws InterruptedException {
-        for(Game g : games)
-            g.startNoDisplay();
+    public void startGames() throws InterruptedException {
+        startGames(0, games.size());
+    }
+
+    public void startGames(int start) throws InterruptedException{
+        startGames(start, games.size());
+    }
+    public void startGames(int start, int end) throws InterruptedException {
+        /*for(Game g : games)
+            g.startNoDisplay();*/
+        for(int i = start;i<end;i++)
+        {
+            games.get(i).startNoDisplay();
+        }
     }
 
 

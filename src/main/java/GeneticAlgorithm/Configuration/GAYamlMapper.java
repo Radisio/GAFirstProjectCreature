@@ -1,6 +1,8 @@
 package GeneticAlgorithm.Configuration;
 
-import GeneticAlgorithm.MonoThread.GeneticAlgorithmMonoThread;
+import GeneticAlgorithm.GeneticAlgorithm;
+import GeneticAlgorithm.GeneticAlgorithmMonoThread;
+import GeneticAlgorithm.GeneticAlgorithmMultiThread;
 import GeneticAlgorithm.Selection.SelectionMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -17,7 +19,7 @@ public class GAYamlMapper {
         return mapper.readValue(new File(path), GAConfig.class);
     }
 
-    public static GeneticAlgorithmMonoThread getGeneticAlgorithmFromPath(String path) throws IOException, ExecutionControl.NotImplementedException {
+    public static GeneticAlgorithm getGeneticAlgorithmFromPath(String path) throws IOException, ExecutionControl.NotImplementedException {
         GAConfig config = getGAConfigFromYAML(path);
         if(config.getNbThread()==1)
         {
@@ -30,7 +32,9 @@ public class GAYamlMapper {
         else
         {
             /// Multithread
-            throw new ExecutionControl.NotImplementedException("Not implemented yet");
+            return new GeneticAlgorithmMultiThread(config.getNbCreature(),config.getMutationFlipRate(), config.getMutationAddRate(), config.getMutationSubRate(),
+                    config.getPercentageParentsToKeep(), config.getSolution(), SelectionMapper.selectionFromSelectionConfig(config.getParentSelection()),
+                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()), config.getNbThread());
         }
     }
 }

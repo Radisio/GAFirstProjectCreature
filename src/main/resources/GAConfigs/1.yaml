@@ -1,7 +1,7 @@
 percentageParentsToKeep: 20.0
 nbCreature: 500
 solution: 0
-nbThread: 1
+nbThread: 4
 parentSelection:
   method: "tournament"
   mp:
