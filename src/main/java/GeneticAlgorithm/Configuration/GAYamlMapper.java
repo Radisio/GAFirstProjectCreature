@@ -19,14 +19,14 @@ public class GAYamlMapper {
         return mapper.readValue(new File(path), GAConfig.class);
     }
 
-    public static GeneticAlgorithm getGeneticAlgorithmFromPath(String path) throws IOException, ExecutionControl.NotImplementedException {
+    public static GeneticAlgorithm getGeneticAlgorithmFromPath(String path) throws IOException {
         GAConfig config = getGAConfigFromYAML(path);
         if(config.getNbThread()==1)
         {
             ///MonoThread double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Selection parentSelection, Selection crossOverSelection
             return new GeneticAlgorithmMonoThread(config.getNbCreature(),config.getMutationFlipRate(), config.getMutationAddRate(), config.getMutationSubRate(),
                     config.getPercentageParentsToKeep(), config.getSolution(), SelectionMapper.selectionFromSelectionConfig(config.getParentSelection()),
-                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection())
+                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()), config.getMaxNbTick()
                     );
         }
         else
@@ -34,7 +34,7 @@ public class GAYamlMapper {
             /// Multithread
             return new GeneticAlgorithmMultiThread(config.getNbCreature(),config.getMutationFlipRate(), config.getMutationAddRate(), config.getMutationSubRate(),
                     config.getPercentageParentsToKeep(), config.getSolution(), SelectionMapper.selectionFromSelectionConfig(config.getParentSelection()),
-                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()), config.getNbThread());
+                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()),config.getMaxNbTick(), config.getNbThread());
         }
     }
 }

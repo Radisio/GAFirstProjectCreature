@@ -24,7 +24,7 @@ public class EnvironmentUtil {
     {
         int x = start.x;
         int y = start.y;
-        List<Position2D> positions = new ArrayList<Position2D>();
+        List<Position2D> positions = new ArrayList<>();
         switch(move)
         {
             case UP_RIGHT:
@@ -83,7 +83,16 @@ public class EnvironmentUtil {
         */
         return positions;
     }
-
+    public static Case[][] deepCopyBoard(Case[][] board)
+    {
+        Case[][] newBoard = new Case[board.length][board[0].length];
+        for(int i = 0;i<board.length;i++)
+        {
+            for(int j =0;j<board[0].length;j++)
+                newBoard[i][j] = new Case(board[i][j].getOccupation());
+        }
+        return newBoard;
+    }
     public static List<Position2D> doMovement(Case[][] board, Position2D start, MovementConst move)
     {
         List<Position2D> positions = new ArrayList<>();

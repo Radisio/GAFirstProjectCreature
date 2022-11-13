@@ -15,3 +15,4 @@ evolveSelection:
 mutationFlipRate: 0.025
 mutationAddRate: 0.025
 mutationSubRate: 0.025
+maxNbTick: 1000

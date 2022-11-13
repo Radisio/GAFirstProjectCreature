@@ -6,6 +6,7 @@ import jdk.jshell.spi.ExecutionControl;
 import org.fusesource.jansi.*;
 
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 public class Program {
     static String ESC = "\u001b";
@@ -66,7 +67,7 @@ public class Program {
 
         GeneticAlgorithm ga = GAYamlMapper.getGeneticAlgorithmFromPath("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\GAConfigs\\1.yaml");
         ga.setEnvironment(new EnvironmentBuilder().build());
-        Game bestG = ga.runAlgorithm(1000);
+        Game bestG = ga.runAlgorithmDebug(1, TimeUnit.SECONDS);
         bestG.start();
     }
 }

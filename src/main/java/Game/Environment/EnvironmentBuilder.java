@@ -11,17 +11,15 @@ import java.util.List;
 import java.util.Random;
 
 public class EnvironmentBuilder {
-    public static int DEFAULT_MIN_NB_LINE = 5;
-    public static int DEFAULT_MAX_NB_LINE = 15;
-    public static int DEFAULT_MIN_NB_COL = 30;
-    public static int DEFAULT_MAX_NB_COL = 40;
-
-
     private  int nbLine;
     private  int nbCol;
     private Position2D startingPos;
     private Position2D endingPos;
     private boolean filling;
+    private int minNbLine;
+    private int maxNbLine;
+    private int minNbCol;
+    private int maxNbCol;
 
     public EnvironmentBuilder()
     {
@@ -30,8 +28,31 @@ public class EnvironmentBuilder {
         this.filling=true;
         this.startingPos = new Position2D(-1,-1);
         this.endingPos = new Position2D(-1,-1);
+        minNbLine =5;
+        maxNbLine = 15;
+        minNbCol = 30;
+        maxNbCol = 40;
     }
-
+    public EnvironmentBuilder setMinNbLine(int m)
+    {
+        this.minNbLine = m;
+        return this;
+    }
+    public EnvironmentBuilder setMaxNbLine(int m)
+    {
+        this.maxNbLine = m;
+        return this;
+    }
+    public EnvironmentBuilder setMinNbCol(int m)
+    {
+        this.minNbCol = m;
+        return this;
+    }
+    public EnvironmentBuilder setMaxNbCol(int m)
+    {
+        this.maxNbCol = m;
+        return this;
+    }
     public EnvironmentBuilder startingPos(Position2D pos)
     {
         this.startingPos = pos;
@@ -63,18 +84,7 @@ public class EnvironmentBuilder {
 
     private int valeurMaxLimit(Position2D start, Position2D end)
     {
-        /**
-        if(start.x>end.x)
-        {
-            return end.x+-start.x+start.y;
-        }
-        else
-            return -end.x+start.x+start.y;**/
         try {
-           //System.out.println("Start (" +start.x + ";" + start.y+")");
-         //   System.out.println("End (" +end.x + ";" + end.y+")");
-         //   System.out.println("VML : " + ((end.x-start.x) / (end.y - start.y)));
-            //return (start.x - end.x) / (start.y - end.y);
             return (end.x-start.x) / (end.y - start.y);
         }
         catch(ArithmeticException ae)
@@ -87,10 +97,6 @@ public class EnvironmentBuilder {
 
     private boolean isSolutionPossible(Position2D start, Position2D end)
     {
-        /*
-        if(start.x>end.x)
-            return valeurMaxLimit(start, end)>=1;
-        return valeurMaxLimit(start,end)<=-1;*/
         int vml = valeurMaxLimit(start,end);
         return vml>=1 || vml <=-1;
     }
@@ -101,11 +107,11 @@ public class EnvironmentBuilder {
         int startingFirstQuart = random.ints(0,2).findAny().getAsInt();
         if(this.nbCol == -1)
         {
-            this.nbCol = random.ints(DEFAULT_MIN_NB_COL,DEFAULT_MAX_NB_COL).findAny().getAsInt();
+            this.nbCol = random.ints(minNbCol,maxNbCol).findAny().getAsInt();
         }
         if(this.nbLine == -1)
         {
-            this.nbLine = random.ints(DEFAULT_MIN_NB_LINE,DEFAULT_MAX_NB_LINE).findAny().getAsInt();
+            this.nbLine = random.ints(minNbLine,maxNbLine).findAny().getAsInt();
 
         }
         if(this.startingPos.x == -1)
@@ -118,6 +124,8 @@ public class EnvironmentBuilder {
                 maxBound = this.nbCol-2;
                 minBound = maxBound - maxBound/4;
             }
+            System.out.println("MinBound : " + minBound);
+            System.out.println("Max bound ; " + maxBound);
             this.startingPos.x = random.ints(minBound, maxBound).findAny().getAsInt();
 
         }
@@ -154,19 +162,15 @@ public class EnvironmentBuilder {
         }
     }
 
-    private Case[][] fillVoid(Case board[][], Position2D pos)
+    private Case[][] fillVoid(Case[][] board, Position2D pos)
     {
-        //System.out.println("FillVoid");
         if(!board[pos.y+1][pos.x].isOccupied())
         {
-           // System.out.println("ON RENTRE");
             board[pos.y+1][pos.x].setOccupation(DesignConst.WHITE_SQUARE);
             if(filling)
             {
-             //   System.out.println("BAGUETTE");
                 int fillingYPos = pos.y+2;
                 while (fillingYPos < nbLine && !board[fillingYPos][pos.x].isOccupied()) {
-               //     System.out.println("Oui");
                     board[fillingYPos++][pos.x].setOccupation(DesignConst.WHITE_SQUARE);
                 }
             }
@@ -174,14 +178,14 @@ public class EnvironmentBuilder {
         return board;
     }
 
-    private void addElement(Case board[][], Position2D pos, char element)
+    private void addElement(Case[][] board, Position2D pos, char element)
     {
         board[pos.y][pos.x].setOccupation(element);
         fillVoid(board,pos);
     }
 
 
-    private void initiateEnvironment(Case board[][])
+    private void initiateEnvironment(Case[][] board)
     {
         for(int i = 0;i<nbLine;i++)
         {
@@ -341,7 +345,7 @@ public class EnvironmentBuilder {
         Case[][] returnedBoard = board;
         Position2D actualPos = this.startingPos;
         //MovementConst[] allowedMovement = new MovementConst[]{MovementConst.UP_RIGHT, MovementConst.RIGHT, MovementConst.DOWN_RIGHT};
-        ArrayList<MovementConst> allowedMovement = new ArrayList<MovementConst>()
+        ArrayList<MovementConst> allowedMovement = new ArrayList<>()
         {
             {
             add(MovementConst.UP_RIGHT);
@@ -353,7 +357,7 @@ public class EnvironmentBuilder {
         };
         if(endingPos.x<startingPos.x)
         {
-            allowedMovement = new ArrayList<MovementConst>()
+            allowedMovement = new ArrayList<>()
             {
                 {
                     add(MovementConst.UP_LEFT);
@@ -431,7 +435,7 @@ public class EnvironmentBuilder {
        // System.out.println("NbLine : " + this.nbLine);
        // System.out.println("nbCol : " + this.nbCol);
 
-        Case board[][] = new Case[nbLine][nbCol];
+        Case[][] board = new Case[nbLine][nbCol];
         initiateEnvironment(board);
         //PAS ENCORE TESTER
         List<Case[][]> solutions = findAllSolution(board, this.startingPos);
@@ -448,7 +452,7 @@ public class EnvironmentBuilder {
     public Environment build()
     {
         setVariable();
-        Case board[][] = new Case[nbLine][nbCol];
+        Case[][] board = new Case[nbLine][nbCol];
         initiateEnvironment(board);
         new Environment(board, this.startingPos, this.endingPos);
         board = getRandomMountain(board);

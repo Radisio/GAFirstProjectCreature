@@ -1,8 +1,12 @@
 package GeneticAlgorithm;
 
+import Game.Debug.DebugGame;
 import Game.Environment.Environment;
 import Game.Game;
 import GeneticAlgorithm.Selection.Selection;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class GeneticAlgorithmMonoThread extends GeneticAlgorithm {
 
@@ -10,27 +14,29 @@ public class GeneticAlgorithmMonoThread extends GeneticAlgorithm {
         super();
     }
 
-    public GeneticAlgorithmMonoThread(double uniformRate, double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Environment environment) {
-        super(uniformRate, mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, environment);
+    public GeneticAlgorithmMonoThread(double uniformRate, double mutationFlipRate, double mutationAddRate, double mutationSubRate,
+                                      double percentageParentsToKeep, double solution, Environment environment, int maxNbTick) {
+        super(uniformRate, mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, environment, maxNbTick);
     }
 
-    public GeneticAlgorithmMonoThread(int nbCreature, double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Selection parentSelection, Selection crossOverSelection) {
-        super(nbCreature, mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, parentSelection, crossOverSelection);
+    public GeneticAlgorithmMonoThread(int nbCreature, double mutationFlipRate, double mutationAddRate, double mutationSubRate,
+                                      double percentageParentsToKeep, double solution, Selection parentSelection, Selection crossOverSelection,
+                                      int maxNbTick) {
+        super(nbCreature, mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, parentSelection, crossOverSelection, maxNbTick);
     }
 
     @Override
     public Game runAlgorithm( int maxIter) throws InterruptedException, CloneNotSupportedException {
         Population myPop = new Population(nbCreature,environment, true);
         int generationCount = 1;
-        myPop.startGames();
+        myPop.startGames(this.maxNbTick);
         while(myPop.getFittest().getScore()>solution && generationCount<maxIter)
         {
-
             System.out.println("Generation : " + generationCount);
             System.out.println("Best score : " + myPop.getFittest().getScore());
             System.out.println("Movement length : " + myPop.getFittest().getCreature().getMovements().size());
             myPop=evolvePopulation(myPop);
-            myPop.startGames();
+            myPop.startGames(this.maxNbTick);
 
             generationCount++;
         }
@@ -44,5 +50,33 @@ public class GeneticAlgorithmMonoThread extends GeneticAlgorithm {
         return myPop.getFittest();
     }
 
+    /// Pas encore testé
+    @Override
+    public Game runAlgorithmDebug(int timeTick, TimeUnit timeUnit) throws InterruptedException, CloneNotSupportedException, IOException {
+        pop = new Population(nbCreature,environment, true);
+        int generationCount = 0;
+        int nbGeneration = displayDebugMenu();
+        int i = 0;
+        while(nbGeneration!=0)
+        {
+            i=0;
 
+            while(i<nbGeneration)
+            {
+                watcher.start();
+                DebugGame.showProgressBar(nbGeneration,i);
+                pop.startGamesDebug(this.maxNbTick, timeTick, timeUnit);
+                i++;
+                pop = evolvePopulation(pop);
+            }
+            watcher.interrupt();
+            generationCount+=nbGeneration;
+            System.out.println("Generation : " + generationCount);
+            System.out.println("Best score : " + pop.getFittest().getScore());
+            System.out.println("Movement length : " + pop.getFittest().getCreature().getMovements().size());
+            nbGeneration = displayDebugMenu();
+        }
+
+        return pop.getFittest();
+    }
 }

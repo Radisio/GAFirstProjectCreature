@@ -1,14 +1,16 @@
 package GeneticAlgorithm;
 
+import Game.Const.DesignConst;
 import Game.Creature.Creature;
 import Game.Environment.Environment;
 import Game.Game;
 import Game.Movement.MovementUtil;
+import MathUtil.Position2D;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Population {
 
@@ -26,19 +28,38 @@ public class Population {
         return games.get(index);
     }
 
-    public void startGames() throws InterruptedException {
-        startGames(0, games.size());
+
+    public void startGamesDebug(int maxNbTick, int time, TimeUnit unit) throws InterruptedException {
+        startGamesDebug(0, games.size(), maxNbTick, time, unit);
     }
 
-    public void startGames(int start) throws InterruptedException{
-        startGames(start, games.size());
+    public void startGamesDebug(int start, int maxNbTick, int time, TimeUnit unit) throws InterruptedException{
+        startGamesDebug(start, games.size(), maxNbTick, time, unit);
     }
-    public void startGames(int start, int end) throws InterruptedException {
+    public void startGamesDebug(int start, int end, int maxNbTick)throws InterruptedException {
+        /*for(Game g : games)
+            g.startNoDisplay();*/
+        startGamesDebug(start, end, maxNbTick, 1, TimeUnit.SECONDS);
+    }
+    public void startGamesDebug(int start, int end, int maxNbTick, int time, TimeUnit unit) throws InterruptedException {
+        for(int i = start;i<end;i++)
+        {
+            games.get(i).startDebug(maxNbTick, time, unit);
+        }
+    }
+    public void startGames(int maxNbTick) throws InterruptedException {
+        startGames(0, games.size(), maxNbTick);
+    }
+
+    public void startGames(int start, int maxNbTick) throws InterruptedException{
+        startGames(start, games.size(), maxNbTick);
+    }
+    public void startGames(int start, int end, int maxNbTick)throws InterruptedException {
         /*for(Game g : games)
             g.startNoDisplay();*/
         for(int i = start;i<end;i++)
         {
-            games.get(i).startNoDisplay();
+            games.get(i).startNoDisplayLimited(maxNbTick);
         }
     }
 
@@ -48,6 +69,9 @@ public class Population {
         for (int i = 0; i < size; i++) {
             Creature newIndividual = new Creature(MovementUtil.generateRandomMovement((int)(Math.random()*200 +1)));
             games.add(i, new Game(new Environment(this.environment), newIndividual));
+            if(i==1)
+                games.get(0).getEnvironment().setBoardOccupation(new Position2D(0,0), DesignConst.ENDING_FLAG);
+
         }
     }
 
@@ -62,6 +86,11 @@ public class Population {
         return game;*/
        //System.out.println("GetFittest : " + this.games.stream().min((Comparator.comparingDouble(o -> o.getScore()))).get().getScore());
         return this.games.stream().min((Comparator.comparingDouble(o -> o.getScore()))).get();
+    }
+
+    public int getFittestRunningIndex()
+    {
+        return this.games.indexOf(this.games.stream().filter(Game::isRunning).min((Comparator.comparingDouble(o -> o.getScore()))).get());
     }
 
     public List<Game> getGames() {

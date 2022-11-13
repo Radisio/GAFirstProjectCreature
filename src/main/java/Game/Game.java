@@ -7,11 +7,15 @@ import Game.Environment.EnvironmentUtil;
 import MathUtil.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 public class Game {
     private Environment environment;
     private Creature creature;
     private double score;
     private Position2D creaturePosition;
+    private boolean end;
+    private boolean debug;
     public Game(Environment environment, Creature creature) {
         this.environment = environment;
         this.creature = creature;
@@ -32,6 +36,7 @@ public class Game {
     private void display()
     {
         System.out.println("\rScore : " + this.score +"\r");
+        System.out.println("Test : " + this.hashCode());
         System.out.println("\r"+this.environment + "\r");
     }
 
@@ -46,11 +51,48 @@ public class Game {
         }
     }
 
-    public void startNoDisplay() throws InterruptedException{
+    public synchronized boolean isEnd() {
+        return end;
+    }
+    public synchronized boolean isRunning(){
+        return !end;
+    }
+
+    public synchronized void setEnd(boolean end) {
+        this.end = end;
+    }
+
+
+    public void startDebug(int maxNbTick, int time, TimeUnit unit) throws InterruptedException {
         updateCreaturePosition(this.environment.getStartingPos());
         int i = 0;
         computeScore();
-        while(this.creaturePosition!=this.environment.getEndingPos() && i<this.creature.getMovements().size())
+        setEnd(false);
+        while(this.creaturePosition!=this.environment.getEndingPos() && i<this.creature.getMovements().size() && i<maxNbTick)
+        {
+            List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(i));
+            for(Position2D pos : positions)
+            {
+                updateCreaturePosition(pos);
+                computeScore();
+                unit.sleep(time);
+                if(isDebug())
+                    display();
+            }
+            i++;
+        }
+        setEnd(true);
+        //computeScore();
+        //System.out.println("I : " + i);
+        //System.out.println("Crea movement size : " + this.creature.getMovements().size());
+        reinitializeEnvironment();
+    }
+
+    public void startNoDisplayLimited(int maxNbTick) throws InterruptedException{
+        updateCreaturePosition(this.environment.getStartingPos());
+        int i = 0;
+        computeScore();
+        while(this.creaturePosition!=this.environment.getEndingPos() && i<this.creature.getMovements().size() && i<maxNbTick)
         {
             List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(i));
             for(Position2D pos : positions)
@@ -60,13 +102,10 @@ public class Game {
             }
             i++;
         }
-        if(this.creaturePosition == this.environment.getEndingPos())
-            System.out.println("AHHHHHHHHHHHHHHHHHHHHHHHH ON Y EST");
         //computeScore();
         //System.out.println("I : " + i);
         //System.out.println("Crea movement size : " + this.creature.getMovements().size());
         reinitializeEnvironment();
-
     }
 
     public void start() throws InterruptedException {
@@ -124,5 +163,13 @@ public class Game {
 
     public Position2D getCreaturePosition() {
         return creaturePosition;
+    }
+
+    public synchronized boolean isDebug() {
+        return debug;
+    }
+
+    public synchronized void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

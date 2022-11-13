@@ -7,25 +7,30 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class Environment implements Serializable, Cloneable {
-    private Case board[][];
+    private Case[][] board;
     private Position2D startingPos;
     private Position2D endingPos;
+
     public Environment(Case[][] board, Position2D starting, Position2D ending) {
 
-        this.board = board;
+        this.board = EnvironmentUtil.deepCopyBoard(board);
         this.startingPos = starting;
         this.endingPos = ending;
     }
 
     public Environment(Environment environment) {
-        this.board = environment.getBoard();
+        this.board = EnvironmentUtil.deepCopyBoard(environment.getBoard());
         this.startingPos = environment.getStartingPos();
         this.endingPos = environment.getEndingPos();
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        Environment e = (Environment) super.clone();
+        e.setBoard(this.getBoard().clone());
+        e.setStartingPos(this.getStartingPos());
+        e.setEndingPos(this.getEndingPos());
+        return e;
     }
 
     public Case[][] getBoard() {
@@ -60,17 +65,17 @@ public class Environment implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        String returnedString="";
+        StringBuilder returnedString= new StringBuilder();
         System.out.println("EndingPos : " + getEndingPos());
         for(int i = 0;i<board.length;i++)
         {
             for(int j = 0; j<board[i].length;j++)
             {
-                returnedString+=board[i][j];
+                returnedString.append(board[i][j]);
             }
-            returnedString+="\n";
+            returnedString.append("\n");
         }
-        return returnedString;
+        return returnedString.toString();
     }
 
     public Position2D getStartingPos() {

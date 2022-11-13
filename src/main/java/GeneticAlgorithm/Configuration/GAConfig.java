@@ -11,10 +11,11 @@ public class GAConfig {
     private double mutationFlipRate;
     private double mutationAddRate;
     private double mutationSubRate;
-
+    private int maxNbTick;
     public GAConfig(){}
 
-    public GAConfig(double percentageParentsToKeep, int nbCreature, double solution, int nbThread, SelectionConfig parentSelection, SelectionConfig evolveSelection, double mutationFlipRate, double mutationAddRate, double mutationSubRate) {
+    public GAConfig(double percentageParentsToKeep, int nbCreature, double solution, int nbThread, SelectionConfig parentSelection, SelectionConfig evolveSelection,
+                    double mutationFlipRate, double mutationAddRate, double mutationSubRate, int maxNbTick) {
         this.percentageParentsToKeep = percentageParentsToKeep;
         this.nbCreature = nbCreature;
         this.solution = solution;
@@ -24,6 +25,7 @@ public class GAConfig {
         this.mutationFlipRate = mutationFlipRate;
         this.mutationAddRate = mutationAddRate;
         this.mutationSubRate = mutationSubRate;
+        this.maxNbTick = maxNbTick;
     }
 
     public int getNbThread() {
@@ -96,6 +98,14 @@ public class GAConfig {
 
     public void setMutationSubRate(double mutationSubRate) {
         this.mutationSubRate = mutationSubRate;
+    }
+
+    public int getMaxNbTick() {
+        return maxNbTick;
+    }
+
+    public void setMaxNbTick(int maxNbTick) {
+        this.maxNbTick = maxNbTick;
     }
 
     @Override
