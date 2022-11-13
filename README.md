@@ -194,7 +194,7 @@ Pour lancer le jeu, deux méthodes sont disponibles :
 
 ## Algorithme génétique
 
-![GAUML](annexes\GAUML.png)
+<img src="annexes/GAUML.png"/>
 
 L'implémentation s'est faite en trois temps:
 
