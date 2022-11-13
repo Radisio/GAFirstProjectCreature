@@ -8,19 +8,21 @@ import MathUtil.*;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
     private Environment environment;
     private Creature creature;
     private double score;
     private Position2D creaturePosition;
-    private boolean end;
+    private AtomicBoolean end;
     private boolean debug;
     public Game(Environment environment, Creature creature) {
         this.environment = environment;
         this.creature = creature;
         this.creaturePosition=null;
         this.score = Double.MAX_VALUE;
+        end = new AtomicBoolean(true);
     }
 
     public double getScore()
@@ -51,15 +53,15 @@ public class Game {
         }
     }
 
-    public synchronized boolean isEnd() {
-        return end;
+    public boolean isEnd() {
+        return end.get();
     }
-    public synchronized boolean isRunning(){
-        return !end;
+    public boolean isRunning(){
+        return !end.get();
     }
 
-    public synchronized void setEnd(boolean end) {
-        this.end = end;
+    public void setEnd(boolean end) {
+        this.end.set(end);
     }
 
 
