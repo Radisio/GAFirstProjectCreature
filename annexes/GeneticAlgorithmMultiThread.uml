@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>GeneticAlgorithm.GeneticAlgorithmMultiThread</OriginalElement>
+  <nodes>
+    <node x="599.0" y="527.0">GeneticAlgorithm.GeneticAlgorithmMultiThread</node>
+    <node x="0.0" y="560.5">GeneticAlgorithm.GeneticAlgorithmMonoThread</node>
+    <node x="337.5" y="0.0">GeneticAlgorithm.GeneticAlgorithm</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="GeneticAlgorithm.GeneticAlgorithmMonoThread" target="GeneticAlgorithm.GeneticAlgorithm" relationship="GENERALIZATION">
+      <point x="0.0" y="-72.5" />
+      <point x="289.5" y="502.0" />
+      <point x="593.0" y="502.0" />
+      <point x="0.0" y="238.5" />
+    </edge>
+    <edge source="GeneticAlgorithm.GeneticAlgorithmMultiThread" target="GeneticAlgorithm.GeneticAlgorithm" relationship="GENERALIZATION">
+      <point x="0.0" y="-106.0" />
+      <point x="896.5" y="502.0" />
+      <point x="593.0" y="502.0" />
+      <point x="0.0" y="238.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0140974967061924" showDependencies="false" x="787.9391067251513" y="455.2047944014804" />
+  <SelectedNodes>
+    <node>GeneticAlgorithm.GeneticAlgorithmMonoThread</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

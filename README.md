@@ -35,11 +35,10 @@ Pour aborder le problème, imaginons différents cas de figures:
 
 - Les cas réalisables
 
-  <img src="annexes/cas_realisable.png"/>
-
+  <img src="annexes/cas_realisable.PNG"/>
 - Les cas irréalisables
 
-  <img src="annexes/cas_irrealisable.png"/>
+  <img src="annexes/cas_irrealisable.PNG"/>
 
   #### Première approche
 
