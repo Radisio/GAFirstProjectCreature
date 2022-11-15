@@ -242,6 +242,14 @@ mutationAddRate: 0.025
 mutationSubRate: 0.025
 maxNbTick: 1000
 ```
-
-
+## Un point sur la synchronisation
+  - L'accès au score (lecture/écriture) a été protégé afin d'éviter toute lecture impropre.
+  - Une variable "end" est utilisé pour le mode "debug" (ou pas-à-pas) afin que, lors de la demande de visualisation du meilleur <u>en cours d'exécution</u>, on puisse bel et bien récupérer une partie qui est entrain de se jouer. Cette variable "end" est mise à false lorsque la partie commence et est mise à "true" lorsque la partie se termine et est protégée.
+  - La division des parties dans les différents threads n'est pas protégé au moyen d'un synchronize. Le vecteur contenant les différentes instances de Game est découpé et chaque thread n'accède qu'à une sous-partie de ce vecteur, n'interférent donc pas les uns avec les autres.
+## Les tests
+  Certaines parties "nouvelles" tel que la désérialisation de fichier YAML de config ont été testé proprement grâce à des tests unitaires. 
+  L'algorithme génétique étant difficile à tester grâce à des tests unitaires traditionnels, ce dernier fut testé lors de différents tests habituelle lors de l'implémentation d'une nouvelle solution. Il en va de même pour la génération aléatoire de terrain.
+## Optimisation des paramètres
+  Afin de trouver les paramètres optimaux, douze boucles ont été utilisée afin de tester différentes valeurs pour chaque paramètres et leurs interactions les uns avec les autres.
+  !! A terminer, génération des résultats en cours d'écriture !!
 
