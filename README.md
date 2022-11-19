@@ -34,8 +34,7 @@ Pour la génération de l'environnement de manière aléatoire, il est important
 Pour aborder le problème, imaginons différents cas de figures:
 
 - Les cas réalisables
-
-  <img src="annexes/cas_realisable.PNG"/>
+<img src="annexes/cas_realisable.PNG"/>
 - Les cas irréalisables
 
   <img src="annexes/cas_irrealisable.PNG"/>
@@ -250,6 +249,14 @@ maxNbTick: 1000
   Certaines parties "nouvelles" tel que la désérialisation de fichier YAML de config ont été testé proprement grâce à des tests unitaires. 
   L'algorithme génétique étant difficile à tester grâce à des tests unitaires traditionnels, ce dernier fut testé lors de différents tests habituelle lors de l'implémentation d'une nouvelle solution. Il en va de même pour la génération aléatoire de terrain.
 ## Optimisation des paramètres
-  Afin de trouver les paramètres optimaux, douze boucles ont été utilisée afin de tester différentes valeurs pour chaque paramètres et leurs interactions les uns avec les autres.
-  !! A terminer, génération des résultats en cours d'écriture !!
+  Afin de trouver les paramètres optimaux, douze boucles ont été utilisée afin de tester différentes valeurs pour chaque paramètres et leurs interactions les uns avec les autres. 
+  Cependant, après 6 heures de génération et plus de 50 000 fichiers csv, j'ai dû arrêter. Cette idée m'avait été inspiré par Tensorboard qui m'avais permis de réaliser une technique similaire pour un projet de Deep Learning. Le problème ici étant que je n'ai pas Tensorboard et que donc l'analyse de + de 50 000 fichiers csv mis sous forme de graphique s'avère loufoque.
+  
+  Je suis donc parti sur <u>une seconde idée</u>.
+  
+  Fort inspiré de la première idée cependant je vais délégué la tâche à l'algorithme de trouver la meilleure configuration.
+  Avant de lancer le processus itératif de test, je test les environnements un certain nombre de fois avec une configuration quelconque afin de récupérer des scores qui me serviront de référence.
+  
+  Le processus itératif testera chaque possibilité de configuration sur les trois environnements et si les nouveaux scores sont meilleurs dans 66% des cas, alors je considère que la configuration testé est la meilleure (actuellement).
+  
 
