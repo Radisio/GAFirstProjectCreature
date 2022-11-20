@@ -1,7 +1,15 @@
-# Projet génétique
+# Projet génétique Paque Eric Ugo MASI2 (2022-2023)
 
 ## Table des matières
-
+1. [Introduciton](#Introduction)
+2. [Librairies et versions utilisées](#Librairies et versions utilisées)
+3. [Arguments lors de l'exécution du programme](#Arguments lors de l'exécution du programme)
+4. [Génération de l'environnement](#Génération de l'environnement)
+5. [Jeu](#Jeu)
+6. [Algorithme génétique](#Algorithme génétique)
+7. [Un point sur la synchronisation](#Un point sur la synchronisation)
+8. [Les tests](#Les tests)
+9. [Optimisation des paramètres](#Optimisation des paramètres)
 
 
 ## Introduction
@@ -20,7 +28,31 @@ Le jeu comporte donc :
     - Drapeau d'arrivée et de départ: permet de visualiser la position de départ de la créature ainsi que la position que la créature doit rejoindre.
 
 Je vais tout d'abord aborder la génération de l'environnement aléatoire que j'ai réalisé, ensuite mon implémentation du jeu pour terminer par mon implémentation de l'algorithme génétique de ce jeu.
+## Librairies et versions utilisées
+    
+- Java 13
+- Apache commons lang 3.11
+- Jackson 2.13.0 
+- Junit 4.13.1 
+- Apache commons math 3.6.1
 
+## Arguments lors de l'exécution du programme
+- nbIter : Obligatoire, Indique le nombre d'itérations maximum
+- GAPath : Obligatoire, Indique le chemin d'accès vers le fichier contenant les différents paramètres pour l'algorithme génétique
+- ENVPath : Optionnel, Indique comment généré le terrain
+  - Si un fichier.yaml est indiqué, ce dernier contiendra des informations sur la génération d'un terrain aléatoire (tel que le nombre de ligne, ou bien les bornes pour le choix aléatoire du nombre de lignes)
+  - Si un fichier .txt est indiqué, alors il s'agit d'un environnement sérialisé qui sera donc désérialisé pour être utilisé
+- ENVPathClass : Optionnel, Indique le chemin d'accès vers un fichier .txt contenant un environnement décrit selon les consignes du projet
+- ENVPathClassReverse : Optionnel, Indique le chemin d'accès vers un fichier .txt contenant un environnement décrit selon les consignes du projet
+- solution : optionnel, Indique la solution attendue
+  - Si l'argument est un double, alors il s'agit de la solution
+  - Si l'argument est égale à -1, alors on va utiliser la solution trouver lors de la génération aléatoire du terrain
+  - Si rien n'est spécifié, alors la solution se trouvant dans le GAPath sera utilisé
+
+Note: Concernant l'environnement, si aucun des trois arguments n'est spécifié, alors un environnement sera généré de toute pièce.
+
+La différence entre ENVPathClass et ENVPathClassReverse est expliquée lors de la partie expliquant la génération du terrain.
+    
 ## Génération de l'environnement
 
 ​	Comme dit précédemment, un environnement peut être composé de différents éléments tels que des bloc, deux drapeaux et des zones de vides.
@@ -182,6 +214,18 @@ La créature avance toujours selon trois mouvements défini de la même manière
 
 Quid de la chute ? Grâce à la fonction gravité défini dans l'énoncé, une suite de position est récupéré. On choisit de manière aléatoire une de ses positions afin de voir si l'objectif est toujours atteignable, si tel est le cas, on y place un nouveau bloc en-dessous (pour arrêter la créature) et on reprend l'avancé.
 
+### ENVPathClass et ENVPathClassReverse
+
+N'ayant pas d'indication sur le système d'axe, j'ai du imaginer donc deux éventualités:
+
+<img src="annexes/ENVPathClassAndENVPathClassReverse.png" />
+
+Le premier, ENVPathClass représente le système d'axe classique que j'utilise.
+
+Le deuxième est une version que je trouve peut être plus logique afin de créer un environnement. La différence
+est que le système d'axe est plus classique (origine en bas et non en haut) et ne prend pas en compte les bords.
+
+
 ## Jeu
 
 Le jeu est conçu d'une manière assez simple. Ce dernier prend en paramètre une créature (doté d'une suite de mouvement) ainsi qu'un environnement.
@@ -191,9 +235,24 @@ Pour lancer le jeu, deux méthodes sont disponibles :
 - "*start*" : Exécute le jeu et affiche l'avancement de la créature à chaque étape 
 - "*startNoDisplay*" : Exécute le jeu sans affichage ni pause (notamment utilisé par l'algorithme génétique)
 
-## Algorithme génétique
+A chaque tick, la créature se déplace d'une case, soit suite à un mouvement réalisé soit à cause d'un mouvement
+antérieur réalisé et toujours en cours (une chute dû à la gravité).
 
-<img src="annexes/GAUML.png"/>
+La partie s'arrête quand:
+- La créature à atteint l'objectif
+- La créature n'a plus de mouvement
+- Le nombre de tick maximum est atteint
+
+Le score est calculé de la manière suivante : 
+
+$$
+\begin{align*}
+&score = distance_euclidienne(position_creature, position_objectif)*0.66 + nbTick*0.33
+&score = \frac{2*distance_euclidienne(position_creature, position_objectif)}{3} + \frac{nbTick}{3}
+\end{align*}
+$$
+
+## Algorithme génétique
 
 L'implémentation s'est faite en trois temps:
 
@@ -202,6 +261,20 @@ L'implémentation s'est faite en trois temps:
 - Implémentation de l'algorithme MultiThread avec une option debug et une exécution pas-à-pas
 
 Note : L'implémentation est très fortement inspiré de l'exemple vu précédemment en cours.
+### Généralité
+Voici certains diagrammes UML expliquant certains détails de mon implémentation
+
+Différentes implémentation de l'algorithme : Mono et Multithread
+
+<img src="annexes/GAUML.png"/>
+
+Différentes implémentations pour la sélection
+
+<img src="annexes/selection.PNG"/>
+
+Différentes implémentations pour le crossOver
+
+<img src="annexes/crossover.PNG" />
 
 ### Algorithme MonoThread et MultiThread
 
@@ -230,12 +303,13 @@ parentSelection:
   method: "tournament"
   mp:
     tournamentSize: "10"
-  rate: 0.25
 evolveSelection:
   method: "tournament"
   mp:
     tournamentSize: "10"
-  rate: 0.25
+crossOver:
+  method: "keepfrombest"
+  rate: 0.5
 mutationFlipRate: 0.025
 mutationAddRate: 0.025
 mutationSubRate: 0.025

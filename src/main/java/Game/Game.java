@@ -73,11 +73,12 @@ public class Game {
     public void startDebug(int maxNbTick, int time, TimeUnit unit) throws InterruptedException {
         updateCreaturePosition(this.environment.getStartingPos());
         int i = 0;
+        int mouvementI = 0;
         computeScore(0);
         setEnd(false);
-        while(this.creaturePosition!=this.environment.getEndingPos() && i<this.creature.getMovements().size() && i<maxNbTick)
+        while(this.creaturePosition!=this.environment.getEndingPos() && mouvementI<this.creature.getMovements().size() && i<maxNbTick)
         {
-            List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(i));
+            List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(mouvementI));
             for(Position2D pos : positions)
             {
                 updateCreaturePosition(pos);
@@ -85,8 +86,9 @@ public class Game {
                 unit.sleep(time);
                 if(isDebug())
                     display();
+                i++;
             }
-            i++;
+            mouvementI++;
         }
         setEnd(true);
         //computeScore();
@@ -98,16 +100,18 @@ public class Game {
     public void startNoDisplayLimited(int maxNbTick) throws InterruptedException{
         updateCreaturePosition(this.environment.getStartingPos());
         int i = 0;
+        int mouvementI = 0;
         computeScore(i);
-        while(this.creaturePosition!=this.environment.getEndingPos() && i<this.creature.getMovements().size() && i<maxNbTick)
+        while(this.creaturePosition!=this.environment.getEndingPos() && mouvementI<this.creature.getMovements().size() && i<maxNbTick)
         {
-            List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(i));
+            List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(mouvementI));
             for(Position2D pos : positions)
             {
                 updateCreaturePosition(pos);
                 computeScore(i);
+                i++;
             }
-            i++;
+            mouvementI++;
         }
         //computeScore();
         //System.out.println("I : " + i);
@@ -119,18 +123,20 @@ public class Game {
         updateCreaturePosition(this.environment.getStartingPos());
         display();
         int i = 0;
+        int mouvementI = 0;
         computeScore(i);
-        while(this.creaturePosition!=this.environment.getEndingPos() && i<this.creature.getMovements().size())
+        while(this.creaturePosition!=this.environment.getEndingPos() && mouvementI<this.creature.getMovements().size())
         {
-            List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(i));
+            List<Position2D> positions = EnvironmentUtil.doMovement(this.environment.getBoard(), this.creaturePosition, this.creature.getMovements().get(mouvementI));
             for(Position2D pos : positions)
             {
                 updateCreaturePosition(pos);
                 Thread.sleep(1000);
                 computeScore(i);
                 display();
+                i++;
             }
-            i++;
+            mouvementI++;
         }
         reinitializeEnvironment();
 
