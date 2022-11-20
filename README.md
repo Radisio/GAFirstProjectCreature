@@ -34,8 +34,7 @@ Pour la génération de l'environnement de manière aléatoire, il est important
 Pour aborder le problème, imaginons différents cas de figures:
 
 - Les cas réalisables
-
-  <img src="annexes/cas_realisable.PNG"/>
+<img src="annexes/cas_realisable.PNG"/>
 - Les cas irréalisables
 
   <img src="annexes/cas_irrealisable.PNG"/>
@@ -242,6 +241,31 @@ mutationAddRate: 0.025
 mutationSubRate: 0.025
 maxNbTick: 1000
 ```
-
-
+## Un point sur la synchronisation
+  - L'accès au score (lecture/écriture) a été protégé afin d'éviter toute lecture impropre.
+  - Une variable "end" est utilisé pour le mode "debug" (ou pas-à-pas) afin que, lors de la demande de visualisation du meilleur <u>en cours d'exécution</u>, on puisse bel et bien récupérer une partie qui est entrain de se jouer. Cette variable "end" est mise à false lorsque la partie commence et est mise à "true" lorsque la partie se termine et est protégée.
+  - La division des parties dans les différents threads n'est pas protégé au moyen d'un synchronize. Le vecteur contenant les différentes instances de Game est découpé et chaque thread n'accède qu'à une sous-partie de ce vecteur, n'interférent donc pas les uns avec les autres.
+## Les tests
+  Certaines parties "nouvelles" tel que la désérialisation de fichier YAML de config ont été testé proprement grâce à des tests unitaires. 
+  L'algorithme génétique étant difficile à tester grâce à des tests unitaires traditionnels, ce dernier fut testé lors de différents tests habituelle lors de l'implémentation d'une nouvelle solution. Il en va de même pour la génération aléatoire de terrain.
+## Optimisation des paramètres
+  Le fichier 1.yaml utilisé lors de mes tests a été "optimisé" par l'essai erreur au fur et à mesure du développement. Cependant, je me suis demandé si il était possible de trouver un moyen objectif d'avoir de "bons" paramètres.
+  
+  Afin de trouver les paramètres optimaux, douze boucles ont été utilisée afin de tester différentes valeurs pour chaque paramètres et leurs interactions les uns avec les autres. 
+  Cependant, après 6 heures de génération et plus de 50 000 fichiers csv, j'ai dû arrêter. Cette idée m'avait été inspiré par Tensorboard qui m'avais permis de réaliser une technique similaire pour un projet de Deep Learning. Le problème ici étant que je n'ai pas Tensorboard et que donc l'analyse de + de 50 000 fichiers csv mis sous forme de graphique s'avère loufoque.
+  
+  Je suis donc parti sur <u>une seconde idée</u>.
+  
+  Fort inspiré de la première idée cependant je vais délégué la tâche à l'algorithme de trouver la meilleure configuration.
+  Avant de lancer le processus itératif de test, je test les environnements un certain nombre de fois avec une configuration quelconque afin de récupérer des scores qui me serviront de référence.
+  
+  Le processus itératif testera chaque possibilité de configuration sur les trois environnements et si les nouveaux scores sont meilleurs dans 66% des cas, alors je considère que la configuration testé est la meilleure (actuellement).
+ 
+  Cependant, malgré que cette idée ne réalise aucun accès disque, contrairement à la précédente, il y a beaucoup trop de combinaisons possible que pour que cela soit réalisable dans un temps réaliste (+ de 10 heures d'exécution et toujours pas de résultat).
+  
+  Je dois donc me diriger vers une troisième idée, qui était donc d'implémenter une technique d'optimisation. Cependant, après avoir investigué plusieures heures, je manque de temps pour implémenter une solution tel qu'une descente du gradient ou une optimisation bayésienne.
+  De plus, il s'avère que les deux techniques précédentes ressemble à la technique appelé GridSearch.
+  
+  
+  
 
