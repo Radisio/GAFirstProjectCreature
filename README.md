@@ -1,17 +1,5 @@
 # Projet génétique Paque Eric Ugo MASI2 (2022-2023)
 
-## Table des matières
-1. [Introduciton](#Introduction)
-2. [Librairies et versions utilisées](#Librairies et versions utilisées)
-3. [Arguments lors de l'exécution du programme](#Arguments lors de l'exécution du programme)
-4. [Génération de l'environnement](#Génération de l'environnement)
-5. [Jeu](#Jeu)
-6. [Algorithme génétique](#Algorithme génétique)
-7. [Un point sur la synchronisation](#Un point sur la synchronisation)
-8. [Les tests](#Les tests)
-9. [Optimisation des paramètres](#Optimisation des paramètres)
-
-
 ## Introduction
 
 ​	Dans le cadre du cours portant sur les algorithmes génétiques, il nous a été demandé de réaliser un premier projet simulant un jeu où l'objectif est assez simple : Notre créature doit trouver le point d'arrivée et ce dernier est capable de mouvements assez simples.
@@ -109,58 +97,25 @@ Pour aborder le problème, imaginons différents cas de figures:
 
   <img src="annexes/illustration_formule.png"/>
 
-  1. $$
-     \begin{align*}
-     	&SML = \frac{3-1}{2-4} \\
-     	&SML = -1
-     \end{align*}
-     $$
+  1. SML = $\frac{3-1}{2-4}$ = -1
 
-  2. $$
-     \begin{align*}
-     	&SML = \frac{1-3}{2-4}\\
-         &SML = 1
-     \end{align*}
-     $$
+  2. SML = $\frac{1-3}{2-4}$ = 1
+ 
+  3. SML = $\frac{1-3}{4-2}$ = -1
 
-  3. $$
-     \begin{align*}
-     	&SML = \frac{1-3}{4-2} \\
-     	&SML = -1
-     \end{align*}
-     $$
-
-  4. $$
-     \begin{align*}
-     	&SML = \frac{3-1}{1-4} \\
-         &SML = \frac{2}{-3} = -0.66667
-     \end{align*}
-     $$
-
-  5. $$
-     \begin{align*}
-     	&SML = \frac{1-3}{1-4} \\
-         &SML = \frac{-2}{-3} = 0.66667 
-     \end{align*}
-     $$
+  4. SML = $\frac{3-1}{1-4}$ = $\frac{2}{-3}$ = -0.66667
+  
+  5. SML = $\frac{1-3}{1-4}$ = $\frac{-2}{-3}$ = 0.66667 
 
 - 
 
 <img src="annexes/illustration_formule_2.png"/>
 
-6. $$
-   \begin{align*}
-   	&SML = \frac{4-1}{2-4} \\
-       &SML = \frac{3}{-2} = -1.5
-   \end{align*}
-   $$
 
-7. $$
-   \begin{align*}
-   	&SML = \frac{1-4}{2-4} \\
-       &SML = \frac{-3}{-2} = 1.5
-   \end{align*}
-   $$
+  6. SML = $\frac{4-1}{2-4}$ = $\frac{3}{-2} = -1.5
+
+  7. SML = $\frac{1-4}{2-4}$ =  $\frac{-3}{-2}$ = 1.5
+
 
 ##### Une solution est-elle donc possible?
 
