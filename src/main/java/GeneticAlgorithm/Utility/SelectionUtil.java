@@ -20,10 +20,7 @@ public class SelectionUtil {
                 int randomId = (int)(Math.random() * pop.getGames().size());
                 tournament.getGames().add(j, pop.getGame(randomId));
             }
-            //System.out.println("Tournament size : " + tournament.getGames().size());
             returnedList.add(tournament.getFittest());
-            //System.out.println("returnedList size : " + returnedList.size());
-          //  System.out.println("NB : " + nb);
         }
         return returnedList;
     }
@@ -31,7 +28,6 @@ public class SelectionUtil {
     {
         List<Game> fittests = pop.getGames();
         Collections.sort(fittests, Comparator.comparingDouble(Game::getScore));
-        //Collections.reverse(fittests);
         fittests.subList(0, nb);
         return fittests;
     }

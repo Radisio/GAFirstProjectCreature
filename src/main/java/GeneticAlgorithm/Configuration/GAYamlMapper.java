@@ -23,7 +23,7 @@ public class GAYamlMapper {
         GAConfig config = getGAConfigFromYAML(path);
         if(config.getNbThread()==1)
         {
-            ///MonoThread double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Selection parentSelection, Selection crossOverSelection
+
             return new GeneticAlgorithmMonoThread(config.getNbCreature(),config.getMutationFlipRate(), config.getMutationAddRate(), config.getMutationSubRate(),
                     config.getPercentageParentsToKeep(), config.getSolution(), SelectionMapper.selectionFromSelectionConfig(config.getParentSelection()),
                     SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()), CrossOverMapper.selectionFromCrossOverConfig(config.getCrossOver()),

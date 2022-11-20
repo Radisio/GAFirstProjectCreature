@@ -77,15 +77,7 @@ public class Population {
 
     public Game getFittest()
     {
-       /* Game game = this.games.get(0);
-        for(int i =1;i<this.games.size();i++)
-        {
-            if(this.games.get(i).getScore()<game.getScore())
-                game = this.games.get(i);
-        }
-        return game;*/
-       //System.out.println("GetFittest : " + this.games.stream().min((Comparator.comparingDouble(o -> o.getScore()))).get().getScore());
-        return this.games.stream().min((Comparator.comparingDouble(o -> o.getScore()))).get();
+                return this.games.stream().min((Comparator.comparingDouble(o -> o.getScore()))).get();
     }
 
     public int getFittestRunningIndex()

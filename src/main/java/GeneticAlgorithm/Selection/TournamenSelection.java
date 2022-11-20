@@ -24,10 +24,7 @@ public class TournamenSelection extends Selection {
                 int randomId = (int)(Math.random() * pop.getGames().size());
                 tournament.getGames().add(j, pop.getGame(randomId));
             }
-            //System.out.println("Tournament size : " + tournament.getGames().size());
             returnedList.add(tournament.getFittest());
-            //System.out.println("returnedList size : " + returnedList.size());
-            //  System.out.println("NB : " + nb);
         }
         return returnedList;
     }

@@ -22,8 +22,6 @@ public enum MovementConst {
     {
         for(MovementConst movement : MovementConst.values())
         {
-          //  System.out.println("Movement : " + movement);
-         //   System.out.println("Movement bytes size : " + movement.bytes.length);
             if(Arrays.equals(movement.bytes, b))
                 return movement;
         }

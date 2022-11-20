@@ -35,7 +35,7 @@ public class MutationUtil {
         }
         if(Math.random()<=mutationSubRate)
         {
-            //System.out.println("SUB MUTATION !!!");
+
             if(movements.size()>0)
                 movements.remove((int)(Math.random() * (movements.size()-1)));
 

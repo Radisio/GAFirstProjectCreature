@@ -36,7 +36,7 @@ public class Game {
     {
         synchronized (this) {
             this.score = MathUtil.euclidianDistance(this.creaturePosition, this.environment.getEndingPos())*0.66 + nbMouvement*0.33;
-            //this.score = MathUtil.euclidianDistance(this.creaturePosition, this.environment.getEndingPos());
+
 
         }
     }
@@ -91,9 +91,9 @@ public class Game {
             mouvementI++;
         }
         setEnd(true);
-        //computeScore();
-        //System.out.println("I : " + i);
-        //System.out.println("Crea movement size : " + this.creature.getMovements().size());
+
+
+
         reinitializeEnvironment();
     }
 
@@ -113,9 +113,9 @@ public class Game {
             }
             mouvementI++;
         }
-        //computeScore();
-        //System.out.println("I : " + i);
-        //System.out.println("Crea movement size : " + this.creature.getMovements().size());
+
+
+
         reinitializeEnvironment();
     }
 

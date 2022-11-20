@@ -240,8 +240,8 @@ public class EnvironmentBuilder {
             pos.y--;
             while(pos!=this.endingPos)
             {
-                //System.out.println("POS : " + pos);
-                //System.out.println("Ending : " + this.endingPos);
+
+
                 addElement(board, new Position2D(pos.x,pos.y+1), DesignConst.WHITE_SQUARE);
                 pos.x--;
                 pos.y--;
@@ -252,10 +252,10 @@ public class EnvironmentBuilder {
     private List<Case[][]> findAllSolution(Case[][] initBoard, Position2D actualPos){
         ArrayList<Case[][]> returnedArrayList = new ArrayList<>();
         if (isSolutionPossible(actualPos, this.endingPos)) {
-            //System.out.println("Actual pos : " + actualPos);
-            //System.out.println("Ending pos : " + this.endingPos);
-            //System.out.println("UNE SOLUTION EST POSSIBLE");
-            ///sI OUI
+
+
+
+
             ///Si solution max limite uniquement disponible (=1 ou =-1)
             int VML = valeurMaxLimit(actualPos, this.endingPos);
             if (VML == 1 || VML == -1) {
@@ -263,7 +263,7 @@ public class EnvironmentBuilder {
                 Case[][] boardSML = initBoard;
                 buildingSML(boardSML, actualPos);
                 returnedArrayList.add(boardSML);
-                //System.out.println("SML Solution");
+
             } else {
                 /// Sinon, on continue
 
@@ -274,7 +274,7 @@ public class EnvironmentBuilder {
                 for (int i = 0; i < 3; i++) {
                     Case[][] board = initBoard;
                     List<Case[][]> result = createSolution(board, this.startingPos, allowedMovement[i]);
-                    //System.out.println("RESULT SIZE 1 : " + result.size());
+
                     if (result.size()>0) {
                         returnedArrayList.addAll(result);
                     }
@@ -292,31 +292,31 @@ public class EnvironmentBuilder {
         ArrayList<Case[][]> returnedArrayList = new ArrayList<>();
         ///Réaliser le mouvement
         List<Position2D> lPos = EnvironmentUtil.doMovement(board, start, move);
-       // System.out.println("LPOS SIZE : " + lPos.size());
+
         if(lPos.size()!=0) {
-            //Position2D actualPos = lPos.get(lPos.size()-1);
+
             ///Sommes-nous sur le point d'arrivée?
             for (Position2D actualPos : lPos) {
                 Case[][] initBoard = board;
                 if (actualPos == this.endingPos) {
-                 //   System.out.println("ENDING POS REACH");
+
                     returnedArrayList.add(initBoard);
                 } else {
                     ///Est-on en l'air ?
                     ///Si oui, block ou pas block ?
                     if (!board[actualPos.y + 1][actualPos.x].isOccupied()) {
                         ///Block
-                        //fillVoid(initBoard, actualPos);
+
                         Case[][] boardBlock = board;
                         addElement(boardBlock, new Position2D(actualPos.x, actualPos.y+1), DesignConst.WHITE_SQUARE);
                         List<Case[][]> result = findAllSolution(boardBlock, actualPos);
-                       // System.out.println("RESULT SIZE 2 : " + result.size());
+
                         if (result.size() > 0)
                             returnedArrayList.addAll(result);
                         /// Pas block : On itère dans la boucle, on arrivera la case d'après
                     } else {
                         List<Case[][]> result = findAllSolution(initBoard, actualPos);
-                       // System.out.println("RESULT SIZE  3: " + result.size());
+
                         if (result.size() > 0)
                             returnedArrayList.addAll(result);
                     }
@@ -350,7 +350,7 @@ public class EnvironmentBuilder {
         nbMouvement=0;
         Case[][] returnedBoard = board;
         Position2D actualPos = this.startingPos;
-        //MovementConst[] allowedMovement = new MovementConst[]{MovementConst.UP_RIGHT, MovementConst.RIGHT, MovementConst.DOWN_RIGHT};
+
         ArrayList<MovementConst> allowedMovement = new ArrayList<>()
         {
             {
@@ -382,18 +382,18 @@ public class EnvironmentBuilder {
         while(actualPos!=this.endingPos) {
             move = false;
             ArrayList<MovementConst> allowMovementTmp = allowedMovement;
-           // System.out.println("ActualPos : " + actualPos);
-            //System.out.println("EndingPos : " + this.endingPos);
+
+
             while (!move) {
                 if(allowMovementTmp.size() == 0)
                 {
-                    //System.out.println("MERDE");
+
                     return returnedBoard;
                 }
                 int indexRandom = random.ints(0, allowMovementTmp.size()).findAny().getAsInt();
                 List<Position2D> pos = EnvironmentUtil.doMovement(returnedBoard, actualPos, allowMovementTmp.get(indexRandom));
                 if (pos.size() == 0) {
-                    //System.out.println("MERDE 2");
+
                     move = false;
                     allowMovementTmp.remove(indexRandom);
                 } else {
@@ -404,20 +404,20 @@ public class EnvironmentBuilder {
                             indexPos = posAvailable.get(random.ints(0, posAvailable.size()).findAny().getAsInt());
                         }
                         Position2D p = pos.get(indexPos);
-                        //System.out.println("POSITION  : " + p);
-                        //System.out.println("END POSITION  : " + endingPos);
+
+
                         if (isSolutionPossible(p, this.endingPos)) {
-                            //System.out.println("AVANT = ");
-                            //new Game.Environment(returnedBoard, this.startingPos, this.endingPos).displayOnce();
+
+
                             returnedBoard = fillVoid(returnedBoard, p);
                             nbMouvement++;
-                            //System.out.println("APRES");
-                            //new Game.Environment(returnedBoard, this.startingPos, this.endingPos).displayOnce();
+
+
                             actualPos = p;
                             move = true;
                         } else {
                             move = false;
-                            //allowMovementTmp.remove(indexRandom);
+
                             if(posAvailable.size()==1)
                                 posAvailable.clear();
                             else
@@ -439,15 +439,15 @@ public class EnvironmentBuilder {
 
     public List<Environment> buildAllSolution() throws ExecutionControl.NotImplementedException {
         setVariable();
-       // System.out.println("NbLine : " + this.nbLine);
-       // System.out.println("nbCol : " + this.nbCol);
+
+
 
         Case[][] board = new Case[nbLine][nbCol];
         initiateEnvironment(board);
         //PAS ENCORE TESTER
         List<Case[][]> solutions = findAllSolution(board, this.startingPos);
-        //System.out.println("SOLUTIONS : " + solutions.size());
-        //return new Game.Environment(board, this.startingPos, this.endingPos);
+
+
         List<Environment> returnedList = new ArrayList<>();
         for (Case[][] s : solutions)
         {

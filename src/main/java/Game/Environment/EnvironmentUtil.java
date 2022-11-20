@@ -44,7 +44,7 @@ public class EnvironmentUtil {
                 {
                     positions.add(new Position2D(x,y));
                 }
-                //positions.add(new Position2D(x,y));
+
                 if(!board[y][--x].isOccupied())
                 {
                     while(!board[y][x].isOccupied())
@@ -66,7 +66,7 @@ public class EnvironmentUtil {
                 {
                     positions.add(new Position2D(x,y));
                 }
-                //positions.add(new Position2D(x,y));
+
                 if(!board[y][++x].isOccupied())
                 {
                     while(!board[y][x].isOccupied())
@@ -102,8 +102,8 @@ public class EnvironmentUtil {
         List<Position2D> positions = new ArrayList<>();
         int x = start.x;
         int y = start.y;
-       // System.out.println("MOVE : " + move);
-      //  System.out.println("x : " + x);
+
+
         switch(move)
         {
             case UP_RIGHT:
@@ -174,7 +174,7 @@ public class EnvironmentUtil {
                 break;
             }
         }
-       // System.out.println("x 2: " + x);
+
         return positions;
     }
     public static Environment readEnvironmentFromFile(String path)
@@ -205,7 +205,7 @@ public class EnvironmentUtil {
             Scanner s = new Scanner(f);
             if(s.hasNextLine()) {
                 String dataLine = s.nextLine();
-                //Start End [Obstacles]
+
                 String[] coordinates = dataLine.split(" ");
                 List<Position2D> positions = new ArrayList<>();
                 for (int i = 0; i < coordinates.length; i++)
@@ -236,7 +236,7 @@ public class EnvironmentUtil {
             Scanner s = new Scanner(f);
             if(s.hasNextLine()) {
                 String dataLine = s.nextLine();
-                //Start End [Obstacles]
+
                 String[] coordinates = dataLine.split(" ");
                 List<Position2D> positions = new ArrayList<>();
                 for (int i = 0; i < coordinates.length; i++) {

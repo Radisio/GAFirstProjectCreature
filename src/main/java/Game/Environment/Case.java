@@ -24,7 +24,7 @@ public class Case implements Serializable {
     }
 
     public boolean isOccupied() {
-        //return occupied;
+
         return this.occupation==DesignConst.WHITE_SQUARE;
     }
 

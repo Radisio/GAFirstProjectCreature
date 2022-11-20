@@ -70,7 +70,7 @@ public class GeneticAlgorithmMultiThread extends GeneticAlgorithm{
                 e.printStackTrace();
             }
         });
-        //executorService.shutdown();
+
         executorService.awaitTermination(10, TimeUnit.SECONDS);
     }
     private void dispatchGameStartingDebug(Population pop,int nbCreaturePerThread, ExecutorService executorService) throws InterruptedException {
@@ -139,7 +139,7 @@ public class GeneticAlgorithmMultiThread extends GeneticAlgorithm{
         List<Callable<Void>> callables = getCallableList(globalPop, nbCreaturePerThread);
 
         generationCount = 1;
-        //dispatchGameStarting(globalPop, nbCreaturePerThread, executorService);
+
         executorService.invokeAll(callables);
         System.out.println("After invoke all");
         while(globalPop.getFittest().getScore()>solution && generationCount<maxIter)
@@ -149,7 +149,7 @@ public class GeneticAlgorithmMultiThread extends GeneticAlgorithm{
             System.out.println("Best score : " + globalPop.getFittest().getScore());
             System.out.println("Movement length : " + globalPop.getFittest().getCreature().getMovements().size());
             globalPop=evolvePopulation(globalPop);
-            //dispatchGameStarting(globalPop, nbCreaturePerThread, executorService);
+
             callables = getCallableList(globalPop, nbCreaturePerThread);
             executorService.invokeAll(callables);
 
@@ -213,7 +213,7 @@ public class GeneticAlgorithmMultiThread extends GeneticAlgorithm{
         {
             log.append(generationCount).append(";").append(globalPop.getFittest().getScore()).append("\n");
             globalPop=evolvePopulation(globalPop);
-            //dispatchGameStarting(globalPop, nbCreaturePerThread, executorService);
+
             callables = getCallableList(globalPop, nbCreaturePerThread);
             executorService.invokeAll(callables);
 

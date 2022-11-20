@@ -27,66 +27,7 @@ public class Program {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException, CloneNotSupportedException, ExecutionControl.NotImplementedException, ClassNotFoundException {
-        /*
-        Game.Environment b = null;
 
-            b = new EnvironmentBuilder().build();
-            FileOutputStream fos = new FileOutputStream("test.txt");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(b);
-            oos.flush();
-            oos.close();
-            System.out.println("First display");
-            b.displayOnce();
-
-        try {
-            FileInputStream fis = new FileInputStream("test.txt");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Game.Environment b2 = (Game.Environment) ois.readObject();
-            System.out.println("Second display");
-            b2.displayOnce();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        List<MovementConst> movements = new ArrayList<>(){
-            {
-                add(MovementConst.RIGHT);
-                add(MovementConst.LEFT);
-                add(MovementConst.UP);
-                add(MovementConst.UP_RIGHT);
-            }
-        };
-        Game game = new Game(new EnvironmentBuilder().build(), new Creature(movements));
-       // game.start();
-
-        Integer test = 1;
-        Byte b = test.byteValue();
-        byte[] bytes = new byte[]{0,0,1};
-        System.out.println(MovementConst.fromByteArray(bytes));*/
-        /*GeneticAlgorithmMonoThread ga = new GeneticAlgorithmMonoThread();
-        Game bestG = ga.runAlgorithm(new EnvironmentBuilder().build(), 10000, 0, 5000, 20.0/100.0);
-        bestG.getEnvironment().displayOnce();
-        bestG.start();*/
-        //System.out.println("TEST");
-        //System.out.println(GAYamlMapper.getGAConfigFromYAML(Program.class.getClassLoader().getResource("GAConfigs/1.yaml").getPath()));
-        //System.out.println(GAYamlMapper.getGAConfigFromYAML("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\GAConfigs\\1.yaml"));
-        /*System.out.println(Runtime.getRuntime().availableProcessors());
-
-        GeneticAlgorithm ga = GAYamlMapper.getGeneticAlgorithmFromPath("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\GAConfigs\\1.yaml");
-        ga.setEnvironment(new EnvironmentBuilder().build());
-        Game bestG = ga.runAlgorithmDebug(1, TimeUnit.SECONDS);
-        bestG.start();*/
-
-        //EnvironmentBuilder eb = EnvironmentYamlMapper.getEnvironmentBuilderFromYAML("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\EnvironmentConfigs\\test.yaml");
-        /*EnvironmentBuilder eb = new EnvironmentBuilder();
-        Environment e = eb.build();
-        GeneticAlgorithm ga = GAYamlMapper.getGeneticAlgorithmFromPath("D:\\Master2\\Système distribué\\PremierProjetCreature\\src\\main\\resources\\GAConfigs\\1.yaml");
-        ga.setEnvironment(e);
-        System.out.println("test " +eb.getNbMouvement());
-        //ga.setSolution(eb.getNbMouvement()*0.33);
-        Game bestG = ga.runAlgorithm(1000);
-        bestG.start();
-        System.out.println("Test : "+eb.getNbMouvement()*0.33);*/
         GeneticAlgorithm ga = null;
         EnvironmentBuilder eb = null;
         Environment env = null;
