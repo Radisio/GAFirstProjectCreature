@@ -9,11 +9,16 @@ public class SelectionMapper {
         {
             case "TOURNAMENT":
             {
-                return new TournamenSelection(Integer.valueOf(selection.getMap().get("tournamentSize")), selection.getRate());
+                return new TournamenSelection(Integer.parseInt(selection.getMap().get("tournamentSize")));
             }
             case "BESTFIT":
             {
-                return new BestFitSelection(selection.getRate());
+                return new BestFitSelection();
+            }
+            case "WHEEL":
+            case "ROULETTE":
+            {
+                return new WheelSelection();
             }
         }
         return null;

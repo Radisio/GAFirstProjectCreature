@@ -9,8 +9,7 @@ import java.util.List;
 public class TournamenSelection extends Selection {
     private final int tournamentSize;
 
-    public TournamenSelection(int tournamentSize, double rate) {
-        super(rate);
+    public TournamenSelection(int tournamentSize) {
         this.tournamentSize = tournamentSize;
     }
 

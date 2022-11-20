@@ -1,12 +1,12 @@
 package GeneticAlgorithm.Configuration;
 
+import GeneticAlgorithm.CrossOver.CrossOverMapper;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmMonoThread;
 import GeneticAlgorithm.GeneticAlgorithmMultiThread;
 import GeneticAlgorithm.Selection.SelectionMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,8 @@ public class GAYamlMapper {
             ///MonoThread double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Selection parentSelection, Selection crossOverSelection
             return new GeneticAlgorithmMonoThread(config.getNbCreature(),config.getMutationFlipRate(), config.getMutationAddRate(), config.getMutationSubRate(),
                     config.getPercentageParentsToKeep(), config.getSolution(), SelectionMapper.selectionFromSelectionConfig(config.getParentSelection()),
-                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()), config.getMaxNbTick()
+                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()), CrossOverMapper.selectionFromCrossOverConfig(config.getCrossOver()),
+                    config.getMaxNbTick()
                     );
         }
         else
@@ -34,7 +35,7 @@ public class GAYamlMapper {
             /// Multithread
             return new GeneticAlgorithmMultiThread(config.getNbCreature(),config.getMutationFlipRate(), config.getMutationAddRate(), config.getMutationSubRate(),
                     config.getPercentageParentsToKeep(), config.getSolution(), SelectionMapper.selectionFromSelectionConfig(config.getParentSelection()),
-                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()),config.getMaxNbTick(), config.getNbThread());
+                    SelectionMapper.selectionFromSelectionConfig(config.getEvolveSelection()),CrossOverMapper.selectionFromCrossOverConfig(config.getCrossOver()),config.getMaxNbTick(), config.getNbThread());
         }
     }
 }

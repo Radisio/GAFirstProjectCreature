@@ -8,15 +8,13 @@ public class SelectionConfig {
     private String method;
     @JsonProperty("mp")
     private Map<String, String> map;
-    private double rate;
 
     public SelectionConfig(){}
 
 
-    public SelectionConfig(String method, Map<String, String> map, double rate) {
+    public SelectionConfig(String method, Map<String, String> map) {
         this.method = method;
         this.map = map;
-        this.rate = rate;
     }
 
     public String getMethod() {
@@ -35,20 +33,13 @@ public class SelectionConfig {
         this.map = map;
     }
 
-    public double getRate() {
-        return rate;
-    }
 
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
 
     @Override
     public String toString() {
         return "SelectionConfig{" +
                 "method='" + method + '\'' +
                 ", map=" + map +
-                ", rate=" + rate +
                 '}';
     }
 }

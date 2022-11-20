@@ -20,6 +20,11 @@ public class EnvironmentBuilder {
     private int maxNbLine;
     private int minNbCol;
     private int maxNbCol;
+    private int nbMouvement;
+
+    public int getNbMouvement() {
+        return nbMouvement;
+    }
 
     public EnvironmentBuilder()
     {
@@ -342,6 +347,7 @@ public class EnvironmentBuilder {
     }
 
     public Case[][] getRandomMountain(Case[][] board) {
+        nbMouvement=0;
         Case[][] returnedBoard = board;
         Position2D actualPos = this.startingPos;
         //MovementConst[] allowedMovement = new MovementConst[]{MovementConst.UP_RIGHT, MovementConst.RIGHT, MovementConst.DOWN_RIGHT};
@@ -404,6 +410,7 @@ public class EnvironmentBuilder {
                             //System.out.println("AVANT = ");
                             //new Game.Environment(returnedBoard, this.startingPos, this.endingPos).displayOnce();
                             returnedBoard = fillVoid(returnedBoard, p);
+                            nbMouvement++;
                             //System.out.println("APRES");
                             //new Game.Environment(returnedBoard, this.startingPos, this.endingPos).displayOnce();
                             actualPos = p;
@@ -454,11 +461,54 @@ public class EnvironmentBuilder {
         setVariable();
         Case[][] board = new Case[nbLine][nbCol];
         initiateEnvironment(board);
-        new Environment(board, this.startingPos, this.endingPos);
         board = getRandomMountain(board);
         if(board==null)
             return null;
         else
             return new Environment(board, this.startingPos, this.endingPos);
+    }
+
+    public Environment buildWObstacles(List<Position2D> obstacles)
+    {
+        Case[][] board = new Case[nbLine][nbCol];
+        initiateEnvironment(board);
+        for(Position2D obstacle : obstacles)
+        {
+            board[obstacle.y][obstacle.x].setOccupation(DesignConst.WHITE_SQUARE);
+            board = fillVoid(board, obstacle);
+        }
+        return new Environment(board, this.startingPos, this.endingPos);
+    }
+
+    public int getNbLine() {
+        return nbLine;
+    }
+
+    public void setNbLine(int nbLine) {
+        this.nbLine = nbLine;
+    }
+
+    public int getNbCol() {
+        return nbCol;
+    }
+
+    public void setNbCol(int nbCol) {
+        this.nbCol = nbCol;
+    }
+
+    public Position2D getStartingPos() {
+        return startingPos;
+    }
+
+    public void setStartingPos(Position2D startingPos) {
+        this.startingPos = startingPos;
+    }
+
+    public Position2D getEndingPos() {
+        return endingPos;
+    }
+
+    public void setEndingPos(Position2D endingPos) {
+        this.endingPos = endingPos;
     }
 }

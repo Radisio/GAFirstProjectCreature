@@ -3,6 +3,7 @@ package GeneticAlgorithm;
 import Game.Debug.DebugGame;
 import Game.Environment.Environment;
 import Game.Game;
+import GeneticAlgorithm.CrossOver.CrossOver;
 import GeneticAlgorithm.Selection.Selection;
 
 import java.io.IOException;
@@ -14,21 +15,21 @@ public class GeneticAlgorithmMonoThread extends GeneticAlgorithm {
         super();
     }
 
-    public GeneticAlgorithmMonoThread(double uniformRate, double mutationFlipRate, double mutationAddRate, double mutationSubRate,
+    public GeneticAlgorithmMonoThread(double mutationFlipRate, double mutationAddRate, double mutationSubRate,
                                       double percentageParentsToKeep, double solution, Environment environment, int maxNbTick) {
-        super(uniformRate, mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, environment, maxNbTick);
+        super(mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, environment, maxNbTick);
     }
 
     public GeneticAlgorithmMonoThread(int nbCreature, double mutationFlipRate, double mutationAddRate, double mutationSubRate,
                                       double percentageParentsToKeep, double solution, Selection parentSelection, Selection crossOverSelection,
-                                      int maxNbTick) {
-        super(nbCreature, mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, parentSelection, crossOverSelection, maxNbTick);
+                                      CrossOver crossOver, int maxNbTick) {
+        super(nbCreature, mutationFlipRate, mutationAddRate, mutationSubRate, percentageParentsToKeep, solution, parentSelection, crossOverSelection, crossOver, maxNbTick);
     }
 
     @Override
     public Game runAlgorithm( int maxIter) throws InterruptedException, CloneNotSupportedException {
         Population myPop = new Population(nbCreature,environment, true);
-        int generationCount = 1;
+        generationCount = 1;
         myPop.startGames(this.maxNbTick);
         while(myPop.getFittest().getScore()>solution && generationCount<maxIter)
         {
@@ -50,11 +51,16 @@ public class GeneticAlgorithmMonoThread extends GeneticAlgorithm {
         return myPop.getFittest();
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     /// Pas encore testé
     @Override
     public Game runAlgorithmDebug(int timeTick, TimeUnit timeUnit) throws InterruptedException, CloneNotSupportedException, IOException {
         pop = new Population(nbCreature,environment, true);
-        int generationCount = 0;
+        generationCount = 0;
         int nbGeneration = displayDebugMenu();
         int i = 0;
         while(nbGeneration!=0)
@@ -78,5 +84,10 @@ public class GeneticAlgorithmMonoThread extends GeneticAlgorithm {
         }
 
         return pop.getFittest();
+    }
+
+    @Override
+    public String runAlgorithmHistory(int maxIter) throws InterruptedException, CloneNotSupportedException {
+        return null;
     }
 }

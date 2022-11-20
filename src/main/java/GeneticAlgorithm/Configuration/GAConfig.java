@@ -8,20 +8,21 @@ public class GAConfig {
     private int nbThread;
     private SelectionConfig parentSelection;
     private SelectionConfig evolveSelection;
+    private CrossOverConfig crossOver;
     private double mutationFlipRate;
     private double mutationAddRate;
     private double mutationSubRate;
     private int maxNbTick;
     public GAConfig(){}
 
-    public GAConfig(double percentageParentsToKeep, int nbCreature, double solution, int nbThread, SelectionConfig parentSelection, SelectionConfig evolveSelection,
-                    double mutationFlipRate, double mutationAddRate, double mutationSubRate, int maxNbTick) {
+    public GAConfig(double percentageParentsToKeep, int nbCreature, double solution, int nbThread, SelectionConfig parentSelection, SelectionConfig evolveSelection, CrossOverConfig crossOverConfig, double mutationFlipRate, double mutationAddRate, double mutationSubRate, int maxNbTick) {
         this.percentageParentsToKeep = percentageParentsToKeep;
         this.nbCreature = nbCreature;
         this.solution = solution;
         this.nbThread = nbThread;
         this.parentSelection = parentSelection;
         this.evolveSelection = evolveSelection;
+        this.crossOver = crossOverConfig;
         this.mutationFlipRate = mutationFlipRate;
         this.mutationAddRate = mutationAddRate;
         this.mutationSubRate = mutationSubRate;
@@ -106,6 +107,14 @@ public class GAConfig {
 
     public void setMaxNbTick(int maxNbTick) {
         this.maxNbTick = maxNbTick;
+    }
+
+    public CrossOverConfig getCrossOver() {
+        return crossOver;
+    }
+
+    public void setCrossOver(CrossOverConfig crossOver) {
+        this.crossOver = crossOver;
     }
 
     @Override

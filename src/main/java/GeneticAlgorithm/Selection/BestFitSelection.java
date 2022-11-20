@@ -9,8 +9,8 @@ import java.util.List;
 
 public class BestFitSelection extends Selection{
 
-    public BestFitSelection(double rate) {
-        super(rate);
+    public BestFitSelection() {
+
     }
 
     @Override
@@ -18,7 +18,7 @@ public class BestFitSelection extends Selection{
         List<Game> fittests = pop.getGames();
         Collections.sort(fittests, Comparator.comparingDouble(Game::getScore));
         //Collections.reverse(fittests);
-        fittests.subList(0, returnedSize);
-        return fittests;
+        return fittests.subList(0, returnedSize);
+
     }
 }

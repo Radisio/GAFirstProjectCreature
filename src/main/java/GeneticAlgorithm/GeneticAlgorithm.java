@@ -3,18 +3,16 @@ package GeneticAlgorithm;
 import Game.Creature.Creature;
 import Game.Environment.Environment;
 import Game.Game;
+import GeneticAlgorithm.CrossOver.CrossOver;
 import GeneticAlgorithm.Selection.Selection;
-import GeneticAlgorithm.Utility.CrossOverUtil;
 import GeneticAlgorithm.Utility.MutationUtil;
-import GeneticAlgorithm.Utility.SelectionUtil;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static Util.Util.input;
 
-public abstract class GeneticAlgorithm {
-    protected double uniformRate;
+public abstract class GeneticAlgorithm implements Cloneable{
     protected double mutationFlipRate;
     protected double mutationAddRate;
     protected double mutationSubRate;
@@ -23,6 +21,9 @@ public abstract class GeneticAlgorithm {
     protected Environment environment;
     protected Selection parentSelection;
     protected Selection crossOverSelection;
+    protected CrossOver crossOver;
+    protected int generationCount;
+
     protected int nbCreature;
     protected int maxNbTick;
     protected Population pop;
@@ -71,7 +72,6 @@ public abstract class GeneticAlgorithm {
     }
 
     protected GeneticAlgorithm() {
-        uniformRate = 0.5;
         mutationFlipRate = 0.025;
         mutationAddRate = 0.025;
         mutationSubRate = 0.025;
@@ -80,10 +80,12 @@ public abstract class GeneticAlgorithm {
         this.percentageParentsToKeep = 0.0;
         this.maxNbTick = 1000;
     }
-
-    protected GeneticAlgorithm(double uniformRate, double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Environment environment,
+    protected GeneticAlgorithm(int maxNbTick)
+    {
+        this.maxNbTick = maxNbTick;
+    }
+    protected GeneticAlgorithm(double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep, double solution, Environment environment,
                                int maxNbTick) {
-        this.uniformRate = uniformRate;
         this.mutationFlipRate = mutationFlipRate;
         this.mutationAddRate = mutationAddRate;
         this.mutationSubRate = mutationSubRate;
@@ -94,7 +96,7 @@ public abstract class GeneticAlgorithm {
     }
 
     protected GeneticAlgorithm(int nbCreature, double mutationFlipRate, double mutationAddRate, double mutationSubRate, double percentageParentsToKeep,
-                               double solution, Selection parentSelection, Selection crossOverSelection, int maxNbTick) {
+                               double solution, Selection parentSelection, Selection crossOverSelection, CrossOver crossOver, int maxNbTick) {
         this.nbCreature = nbCreature;
         this.mutationFlipRate = mutationFlipRate;
         this.mutationAddRate = mutationAddRate;
@@ -103,34 +105,58 @@ public abstract class GeneticAlgorithm {
         this.solution = solution;
         this.parentSelection = parentSelection;
         this.crossOverSelection = crossOverSelection;
+        this.crossOver = crossOver;
         this.maxNbTick = maxNbTick;
+    }
+
+    public double getSolution() {
+        return solution;
+    }
+
+    public void setSolution(double solution) {
+        this.solution = solution;
     }
 
     public abstract Game runAlgorithm(int maxIter) throws InterruptedException, CloneNotSupportedException;
 
     public abstract Game runAlgorithmDebug(int timeTick, TimeUnit timeUnit) throws InterruptedException, CloneNotSupportedException, IOException;
-
+    public abstract String runAlgorithmHistory(int maxIter) throws InterruptedException, CloneNotSupportedException;
     public Population evolvePopulation(Population pop) throws CloneNotSupportedException {
-        Population newPop = new Population(pop.getGames().size(), (Environment) this.environment.clone(), false);
+        Population newPop = new Population(0, (Environment) this.environment.clone(), false);
         int elitismOffset = 0;
         if (this.percentageParentsToKeep != 0.0) {
             elitismOffset = (int) (pop.getGames().size() * percentageParentsToKeep);
-            newPop.getGames().addAll(SelectionUtil.tournamentSelection(pop, 5, elitismOffset));
+            newPop.getGames().addAll(parentSelection.select(pop, elitismOffset));
 
         }
-
         for (int i = elitismOffset; i < pop.getGames().size(); i++) {
-            Game g1 = SelectionUtil.tournamentSelection(pop, 10, 1).get(0);
-            Game g2 = SelectionUtil.tournamentSelection(pop, 10, 1).get(0);
-            Creature newCreature = CrossOverUtil.crossOverKeepFromBest(g1, g2, this.uniformRate);
+            Game g1 = crossOverSelection.select(pop,  1).get(0);
+            Game g2 = crossOverSelection.select(pop, 1).get(0);
+            Creature newCreature = crossOver.crossOver(g1,g2);
             newPop.getGames().add(i, new Game((Environment) this.environment.clone(), newCreature));
         }
         for (int i = elitismOffset; i < pop.getGames().size(); i++) {
             newPop.getGame(i).setCreature(MutationUtil.mutate(newPop.getGame(i), this.mutationFlipRate, this.mutationAddRate, this.mutationSubRate));
 
         }
-
         return newPop;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        GeneticAlgorithm cloned = (GeneticAlgorithm) super.clone();
+        cloned.setSolution(this.getSolution());
+        cloned.setCrossOverSelection(this.getCrossOverSelection());
+        cloned.setNbCreature(getNbCreature());
+        cloned.setPercentageParentsToKeep(this.getPercentageParentsToKeep());
+        cloned.setMutationFlipRate(this.getMutationFlipRate());
+        cloned.setMutationSubRate(this.getMutationSubRate());
+        cloned.setMutationAddRate(this.getMutationAddRate());
+        cloned.setCrossOver(this.getCrossOver());
+        cloned.setParentSelection(this.getParentSelection());
+        cloned.setEnvironment(this.getEnvironment());
+        cloned.setMaxNbTick(this.getMaxNbTick());
+        return cloned;
     }
 
     public int displayDebugMenu() throws IOException {
@@ -151,5 +177,107 @@ public abstract class GeneticAlgorithm {
             }
         }
         return 0;
+    }
+
+
+
+    public double getMutationFlipRate() {
+        return mutationFlipRate;
+    }
+
+    public void setMutationFlipRate(double mutationFlipRate) {
+        this.mutationFlipRate = mutationFlipRate;
+    }
+
+    public double getMutationAddRate() {
+        return mutationAddRate;
+    }
+
+    public void setMutationAddRate(double mutationAddRate) {
+        this.mutationAddRate = mutationAddRate;
+    }
+
+    public double getMutationSubRate() {
+        return mutationSubRate;
+    }
+
+    public void setMutationSubRate(double mutationSubRate) {
+        this.mutationSubRate = mutationSubRate;
+    }
+
+    public double getPercentageParentsToKeep() {
+        return percentageParentsToKeep;
+    }
+
+    public void setPercentageParentsToKeep(double percentageParentsToKeep) {
+        this.percentageParentsToKeep = percentageParentsToKeep;
+    }
+
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public Selection getParentSelection() {
+        return parentSelection;
+    }
+
+    public void setParentSelection(Selection parentSelection) {
+        this.parentSelection = parentSelection;
+    }
+
+    public Selection getCrossOverSelection() {
+        return crossOverSelection;
+    }
+
+    public void setCrossOverSelection(Selection crossOverSelection) {
+        this.crossOverSelection = crossOverSelection;
+    }
+
+    public int getNbCreature() {
+        return nbCreature;
+    }
+
+    public void setNbCreature(int nbCreature) {
+        this.nbCreature = nbCreature;
+    }
+
+    public int getMaxNbTick() {
+        return maxNbTick;
+    }
+
+    public void setMaxNbTick(int maxNbTick) {
+        this.maxNbTick = maxNbTick;
+    }
+
+    public CrossOver getCrossOver() {
+        return crossOver;
+    }
+
+    public void setCrossOver(CrossOver crossOver) {
+        this.crossOver = crossOver;
+    }
+
+    public int getGenerationCount() {
+        return generationCount;
+    }
+
+    @Override
+    public String toString() {
+        return "GeneticAlgorithm{" +
+                "mutationFlipRate=" + mutationFlipRate +
+                ", mutationAddRate=" + mutationAddRate +
+                ", mutationSubRate=" + mutationSubRate +
+                ", percentageParentsToKeep=" + percentageParentsToKeep +
+                ", solution=" + solution +
+                ", environment=" + environment +
+                ", parentSelection=" + parentSelection +
+                ", crossOverSelection=" + crossOverSelection +
+                ", crossOver=" + crossOver +
+                ", generationCount=" + generationCount +
+                ", nbCreature=" + nbCreature +
+                ", maxNbTick=" + maxNbTick +
+                ", pop=" + pop +
+                ", watcher=" + watcher +
+                '}';
     }
 }
