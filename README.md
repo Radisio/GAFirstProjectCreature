@@ -200,12 +200,10 @@ La partie s'arrête quand:
 
 Le score est calculé de la manière suivante : 
 
-$$
-\begin{align*}
-&score = distance_euclidienne(position_creature, position_objectif)*0.66 + nbTick*0.33
-&score = \frac{2*distance_euclidienne(position_creature, position_objectif)}{3} + \frac{nbTick}{3}
-\end{align*}
-$$
+score = distance_euclidienne(position_creature, position_objectif)\*0.66 + nbTick*0.33
+
+score = $\frac{2*distance_euclidienne(position_creature, position_objectif)}{3}$ + $\frac{nbTick}{3}$
+
 
 ## Algorithme génétique
 
